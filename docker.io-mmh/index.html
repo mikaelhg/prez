@@ -56,7 +56,11 @@
 
                     pohjalle valmis Ubuntu tai CentOS
 
-                    omat lisäykset "committeina"
+                    omat lisäykset ``aufs`` CoW kerroksina
+
+                    ``aufs`` kerrokset ovat tiedostoja
+
+                    docker ylläpitää metadataa
                 </section>
 
                 <section data-markdown>
@@ -87,6 +91,18 @@
                 </section>
 
                 <section data-markdown>
+                    ### Data ja metadata
+
+                    ```
+                    Successfully built 52b9da625e0a
+
+                    $ cat /var/lib/docker/graph/52b9da625e0a*/json
+                    {"id":"52b9da625e0a...","parent":"21b588a3f35f7...", ...
+
+                    ```
+                </section>
+
+                    <section data-markdown>
                     ### Käynnistys
 
                     ```
@@ -131,15 +147,23 @@
                 </section>
 
                 <section data-markdown>
+                    ### Yhteisö
+
+                    100 kehittäjää
+
+                    20 pull requestia / viikko
+
+                    DotCloud yrityksenä taustalla
+                </section>
+
+                <section data-markdown>
                     ### Ongelmia
 
-                    ``aufs`` pitää ehkä korvata ``brtfs``:lla 2014
+                    ``aufs`` pitää ehkä korvata ``brtfs``:lla
 
                     vain Linux, ei OSX tai Windows
 
                     ei vielä valmis tuotantoon, 1.0 roadmap on olemassa
-
-                    kehittävät firmat ovat pienempiä kuin VMWare
                 </section>
 
                 <section data-markdown>
