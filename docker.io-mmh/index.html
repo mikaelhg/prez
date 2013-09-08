@@ -63,31 +63,58 @@
                     docker ylläpitää metadataa
                 </section>
 
-                <section data-markdown>
-                    ### Dockerfile ja repository
+                <section>
 
-                    ```
-                    $ docker build -t mikaelhg/rabbitmq \
-                        git://github.com/mikaelhg/docker-rabbitmq.git
+                    <section data-markdown>
+                        ### Dockerfile ja repository
 
-                    ...
-                    Step 13 : CMD /usr/sbin/rabbitmq-server
-                    ---> Running in 8951ed47eb9a
-                    ---> 52b9da625e0a
+                        ```
+                        $ docker build -t mikaelhg/rabbitmq \
+                            git://github.com/mikaelhg/docker-rabbitmq.git
 
-                    Successfully built 52b9da625e0a
+                        ...
+                        Step 13 : CMD /usr/sbin/rabbitmq-server
+                        ---> Running in 8951ed47eb9a
+                        ---> 52b9da625e0a
 
-                    $ docker push mikaelhg/rabbitmq
+                        Successfully built 52b9da625e0a
 
-                    The push refers to a repository [mikaelhg/rabbitmq] (len: 1)
-                    Sending image list
-                    Pushing repository mikaelhg/rabbitmq (1 tags)
-                    ...
-                    ```
+                        $ docker push mikaelhg/rabbitmq
 
-                    asennusohjeet gitissä / [github](https://github.com/mikaelhg/docker-rabbitmq)issa
+                        The push refers to a repository [mikaelhg/rabbitmq] (len: 1)
+                        Sending image list
+                        Pushing repository mikaelhg/rabbitmq (1 tags)
+                        ...
+                        ```
 
-                    myös yksityiset repositoryt imageille
+                        asennusohjeet gitissä / [github](https://github.com/mikaelhg/docker-rabbitmq)issa
+
+                        myös yksityiset repositoryt imageille
+                    </section>
+
+                    <section data-markdown>
+                        ### Dockerfile
+
+                        ```
+                        FROM ubuntu:12.04
+
+                        ADD policy-rc.d /usr/sbin/policy-rc.d
+                        RUN /bin/chmod 755 /usr/sbin/policy-rc.d
+
+                        ENV DEBIAN_FRONTEND noninteractive
+                        ADD rabbitmq-signing-key-public.asc /tmp/rabbitmq-signing-key-public.asc
+                        RUN apt-key add /tmp/rabbitmq-signing-key-public.asc
+
+                        RUN echo "deb http://www.rabbitmq.com/debian/ testing main" > /etc/apt/sources.list.d/rabbitmq.list
+                        RUN apt-get -qq update
+                        RUN apt-get -qq -y install rabbitmq-server
+                        RUN /usr/sbin/rabbitmq-plugins enable rabbitmq_management
+
+                        EXPOSE 5672 15672
+                        CMD /usr/sbin/rabbitmq-server
+                        ```
+                    </section>
+
                 </section>
 
                 <section data-markdown>
@@ -98,6 +125,19 @@
 
                     $ cat /var/lib/docker/graph/52b9da625e0a*/json
                     {"id":"52b9da625e0a...","parent":"21b588a3f35f7...", ...
+
+                    $ cat /var/lib/docker/graph/e7ef3b534726*/json
+                    {"id":"e7ef3b534726c7c...","parent":"62cd0c01b2f4...",
+                     "container_config":{"Cmd":["/bin/sh","-c",
+                       "/usr/sbin/rabbitmq-plugins enable rabbitmq_management"]
+
+                    $ cat .../e7ef3b534726*/layer/etc/rabbitmq/enabled_plugins
+                    [rabbitmq_management].
+
+                    $ find .../e7ef3b534726*/layer/ -type f | xargs ls -Flah
+                    -r-------- 1 root 20 03:00 .../layer/.erlang.cookie
+                    -rw-r--r-- 1 root 23 16:02 .../layer/etc/rabbitmq/enabled_plugins
+                    -r--r--r-- 1 root  0 16:02 .../layer/.wh..wh.aufs
 
                     ```
                 </section>
