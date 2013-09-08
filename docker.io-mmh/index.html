@@ -47,6 +47,8 @@
                     kevyt, versioitu, mutta ei Aito VM&trade;
 
                     ... vaan LXC container (IP, CPU, muisti)
+
+                    Google *Go* kielellä kirjoitettu
                 </section>
 
                 <section data-markdown>
@@ -74,6 +76,7 @@
                     $ docker push mikaelhg/rabbitmq
                     ```
 
+                    myös yksityiset repositoryt
                 </section>
 
                 <section data-markdown>
@@ -95,26 +98,61 @@
                     Starting broker... completed with 6 plugins.
 
                     ```
-
                 </section>
 
-                <!--
+                <section data-markdown>
+                    ### Pysyvä, ei-versioitu kama
 
-                Dockerfile ja repository (github imageille)
+                    ```
+                    $ mkdir /tmp/rabbitmq-logs
+                    $ chown syslog:syslog /tmp/rabbitmq-logs # kirjoittaja
 
-                brtfs vs aufs: https://github.com/dotcloud/docker/issues/443
+                    $ docker run -p 5672:5672 -p 15672:15672 \
+                        -v /tmp/rabbitmq-logs:/var/log/rabbitmq mikaelhg/rabbitmq
 
-                Vastaan: vain Linuxille
+                    RabbitMQ 3.1.5. Copyright (C) 2007-2013 GoPivotal, Inc.
+                    ##  ##      Licensed under the MPL.  See http://www.rabbitmq.com/
+                    ##  ##
+                    ##########  Logs: /var/log/rabbitmq/rabbit@6d3eede69263.log
+                    ######  ##        /var/log/rabbitmq/rabbit@6d3eede69263-sasl.log
+                    ##########
+                    Starting broker... completed with 6 plugins.
 
-                Puolesta: kevyempi kuin virtualisointi
+                    $ tail /tmp/rabbitmq-logs/rabbit@6d3eede69263-sasl.log
 
-                Tänään: CI ympäristö integraatiotestaukseen
+                    ```
+                </section>
 
-                2014-2015: flynn.io PaaS
+                <section data-markdown>
+                    ### Ongelmia
 
-                Demo:
+                    ``aufs`` pitää ehkä korvata ``brtfs``:lla 2014
 
-                -->
+                    vain Linux, ei OSX tai Windows
+
+                    ei vielä valmis tuotantoon, 1.0 roadmap on olemassa
+
+                    kehittävät firmat ovat pienempiä kuin VMWare
+                </section>
+
+                <section data-markdown>
+                    ### Tänään
+
+                    CI ympäristö integraatiotestaukseen
+
+                    testit ajetaan neitseellisessä ympäristössä
+
+                    helppo asentaa paketteja kuten rabbitmq
+
+                    ei vaadi resursseja tai byrokratiaa
+                </section>
+
+                <section data-markdown>
+                    ### 2014-2015 flynn.io PaaS
+
+                    ![flynn.io](https://flynn.io/images/dokku-625b2cac.gif)
+
+                </section>
 
             </div>
 
