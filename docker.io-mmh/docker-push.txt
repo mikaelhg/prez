@@ -1,0 +1,56 @@
+$ docker push mikaelhg/rabbitmq
+
+The push refers to a repository [mikaelhg/rabbitmq] (len: 1)
+Sending image list
+Pushing repository mikaelhg/rabbitmq (1 tags)
+Pushing 8dbd9e392a964056420e5d58ca5cc376ef18e2de93b5cc90e868a1bbc8318c1c
+Image 8dbd9e392a964056420e5d58ca5cc376ef18e2de93b5cc90e868a1bbc8318c1c already pushed, skipping
+Pushing tags for rev [8dbd9e392a964056420e5d58ca5cc376ef18e2de93b5cc90e868a1bbc8318c1c] on {https://registry-1.docker.io/v1/repositories/mikaelhg/rabbitmq/tags/latest}
+Pushing c31533cdefb6895f28e50e16b2f31bfdebf18cb71cbcc99e8c967c294d7c0895
+
+
+Pushing tags for rev [c31533cdefb6895f28e50e16b2f31bfdebf18cb71cbcc99e8c967c294d7c0895] on {https://registry-1.docker.io/v1/repositories/mikaelhg/rabbitmq/tags/latest}
+Pushing cf2cd1362fd0a7faef547f5134649cba804f2a6ebaa6ef5b97dfae745504e841
+
+
+Pushing tags for rev [cf2cd1362fd0a7faef547f5134649cba804f2a6ebaa6ef5b97dfae745504e841] on {https://registry-1.docker.io/v1/repositories/mikaelhg/rabbitmq/tags/latest}
+Pushing 37da750e3a681a8cb0a063f4966e35a1d47e4094e5bdfa467c4783e7588271dd
+
+
+Pushing tags for rev [37da750e3a681a8cb0a063f4966e35a1d47e4094e5bdfa467c4783e7588271dd] on {https://registry-1.docker.io/v1/repositories/mikaelhg/rabbitmq/tags/latest}
+Pushing 51187623e2de23d90f326b34d601ba7f5ef9808c18bc261370133bc334099537
+
+
+Pushing tags for rev [51187623e2de23d90f326b34d601ba7f5ef9808c18bc261370133bc334099537] on {https://registry-1.docker.io/v1/repositories/mikaelhg/rabbitmq/tags/latest}
+Pushing 00564021cd74f9dfebee914a58fd8d3c9815ae57540e46db6487b543a78197d2
+
+
+Pushing tags for rev [00564021cd74f9dfebee914a58fd8d3c9815ae57540e46db6487b543a78197d2] on {https://registry-1.docker.io/v1/repositories/mikaelhg/rabbitmq/tags/latest}
+Pushing 810b229c510255430777544ada7aa161e0f8606f992dc2a62ab383897051fa6a
+
+
+Pushing tags for rev [810b229c510255430777544ada7aa161e0f8606f992dc2a62ab383897051fa6a] on {https://registry-1.docker.io/v1/repositories/mikaelhg/rabbitmq/tags/latest}
+Pushing cd60ab133f362daa335cc71d08c898956e9df5980732068ad5a8d2121074dbed
+
+
+Pushing tags for rev [cd60ab133f362daa335cc71d08c898956e9df5980732068ad5a8d2121074dbed] on {https://registry-1.docker.io/v1/repositories/mikaelhg/rabbitmq/tags/latest}
+Pushing 19a48d551a73d21e54693e2e8fd6e2693d4e2982987f5a34a3ee6ff8fb79e50c
+
+
+Pushing tags for rev [19a48d551a73d21e54693e2e8fd6e2693d4e2982987f5a34a3ee6ff8fb79e50c] on {https://registry-1.docker.io/v1/repositories/mikaelhg/rabbitmq/tags/latest}
+Pushing 62cd0c01b2f471e98f31cd5d22ee5bedede2bc6f7465ad66560ef365ea8f3fe6
+
+
+Pushing tags for rev [62cd0c01b2f471e98f31cd5d22ee5bedede2bc6f7465ad66560ef365ea8f3fe6] on {https://registry-1.docker.io/v1/repositories/mikaelhg/rabbitmq/tags/latest}
+Pushing e7ef3b534726c7c427c0a23e40534be8c5a49d9a52e972c8406fdfc4fb7afcf3
+
+
+Pushing tags for rev [e7ef3b534726c7c427c0a23e40534be8c5a49d9a52e972c8406fdfc4fb7afcf3] on {https://registry-1.docker.io/v1/repositories/mikaelhg/rabbitmq/tags/latest}
+Pushing 21b588a3f35f7247ac25ff21932e9726902d67ab381130f006d49b5ffc295b16
+
+
+Pushing tags for rev [21b588a3f35f7247ac25ff21932e9726902d67ab381130f006d49b5ffc295b16] on {https://registry-1.docker.io/v1/repositories/mikaelhg/rabbitmq/tags/latest}
+Pushing 52b9da625e0a552a047639e4c7731f8524ab1434864e12a8efc703dfe4f9a473
+
+
+Pushing tags for rev [52b9da625e0a552a047639e4c7731f8524ab1434864e12a8efc703dfe4f9a473] on {https://registry-1.docker.io/v1/repositories/mikaelhg/rabbitmq/tags/latest}
