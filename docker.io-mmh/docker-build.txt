@@ -1,0 +1,66 @@
+# Newlines added between steps, for legibility
+
+$ sudo docker build -t mikaelhg/rabbitmq git://github.com/mikaelhg/docker-rabbitmq.git
+
+Step 1 : FROM ubuntu:12.04
+ ---> 8dbd9e392a96
+
+Step 2 : MAINTAINER Mikael Gueck "gumi@iki.fi"
+ ---> Using cache
+ ---> c31533cdefb6
+
+Step 3 : ADD policy-rc.d /usr/sbin/policy-rc.d
+ ---> cf2cd1362fd0
+
+Step 4 : RUN /bin/chmod 755 /usr/sbin/policy-rc.d
+ ---> Running in 5dbcc633ec28
+ ---> 37da750e3a68
+
+Step 5 : ENV DEBIAN_FRONTEND noninteractive
+ ---> Running in cba12d451412
+ ---> 51187623e2de
+
+Step 6 : ADD rabbitmq-signing-key-public.asc /tmp/rabbitmq-signing-key-public.asc
+ ---> 00564021cd74
+
+Step 7 : RUN apt-key add /tmp/rabbitmq-signing-key-public.asc
+ ---> Running in 55c4df2fdab3
+OK
+ ---> 810b229c5102
+
+Step 8 : RUN echo "deb http://www.rabbitmq.com/debian/ testing main" > /etc/apt/sources.list.d/rabbitmq.list
+ ---> Running in b55def85ce2c
+ ---> cd60ab133f36
+
+Step 9 : RUN apt-get -qq update > /dev/null
+ ---> Running in 0cb77389ce64
+ ---> 19a48d551a73
+
+Step 10 : RUN apt-get -qq -y install rabbitmq-server > /dev/null
+ ---> Running in b5bb5984524f
+debconf: delaying package configuration, since apt-utils is not installed
+invoke-rc.d: policy-rc.d denied execution of start.
+invoke-rc.d: policy-rc.d denied execution of start.
+ ---> 62cd0c01b2f4
+
+Step 11 : RUN /usr/sbin/rabbitmq-plugins enable rabbitmq_management
+ ---> Running in 37662c093f7f
+The following plugins have been enabled:
+  mochiweb
+  webmachine
+  rabbitmq_web_dispatch
+  amqp_client
+  rabbitmq_management_agent
+  rabbitmq_management
+Plugin configuration has changed. Restart RabbitMQ for changes to take effect.
+ ---> e7ef3b534726
+
+Step 12 : EXPOSE 5672 15672
+ ---> Running in 2ef5f90dc86f
+ ---> 21b588a3f35f
+
+Step 13 : CMD /usr/sbin/rabbitmq-server
+ ---> Running in 8951ed47eb9a
+ ---> 52b9da625e0a
+
+Successfully built 52b9da625e0a

@@ -2,25 +2,26 @@
 <html lang="en">
 
     <head>
-        <meta charset="utf-8">
+        <meta charset="utf-8" />
 
         <title>docker.io - mikä mitä häh?</title>
 
-        <meta name="description" content="docker.io - mikä mitä häh?">
-        <meta name="author" content="Mikael Gueck">
+        <meta name="description" content="docker.io - mikä mitä häh?" />
+        <meta name="author" content="Mikael Gueck" />
 
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
-        <link rel="stylesheet" href="//cdn.jsdelivr.net/reveal.js/2.5.0/js/reveal.min.js">
-        <link rel="stylesheet" href="//cdn.jsdelivr.net/reveal.js/2.5.0/css/theme/default.css" id="theme">
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/reveal.js/2.5.0/css/reveal.css" />
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/reveal.js/2.5.0/css/theme/sky.css" id="theme" />
 
-        <!-- For syntax highlighting -->
-        <link rel="stylesheet" href="//cdn.jsdelivr.net/reveal.js/2.5.0/lib/css/zenburn.css">
+        <script src="//cdn.jsdelivr.net/reveal.js/2.5.0/lib/js/head.min.js"></script>
+        <script src="//cdn.jsdelivr.net/reveal.js/2.5.0/js/reveal.js"></script>
 
-        <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/reveal.js/2.5.0/lib/css/zenburn.css" />
+
         <script>
             document.write( '<link rel="stylesheet" href="//cdn.jsdelivr.net/reveal.js/2.5.0/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
         </script>
@@ -31,66 +32,102 @@
     </head>
 
     <body>
-
         <div class="reveal">
 
-            <!-- Any section element inside of this container is displayed as a slide -->
             <div class="slides">
-                <section>
-                    <h1>docker.io</h1>
-                    <h3>mikä mitä häh?</h3>
-                    <p>
-                        <small>Mikael Gueck</small>
-                    </p>
-                </section>
-
-                <section>
-                    <h2>Heads Up</h2>
-                    <p>
-                        reveal.js is a framework for easily creating beautiful presentations using HTML. You'll need a browser with
-                        support for CSS 3D transforms to see it in its full glory.
-                    </p>
-
-                    <aside class="notes">
-                        Oh hey, these are some notes. They'll be hidden in your presentation, but you can see them if you open the speaker notes window (hit 's' on your keyboard).
-                    </aside>
+                <section data-markdown>
+                    # docker.io
+                    ## mikä, mitä, häh?
+                    <p><small>Mikael Gueck</small></p>
                 </section>
 
                 <section data-markdown>
-                    <script type="text/template">
-                        ## Markdown support
+                    ### "Git virtuaalikoneille"
 
-                        For those of you who like that sort of thing. Instructions and a bit more info available [here](https://github.com/hakimel/reveal.js#markdown).
+                    kevyt, versioitu, mutta ei Aito VM&trade;
 
-                        ```
-                        <section data-markdown>
-                          ## Markdown support
-
-                          For those of you who like that sort of thing.
-                          Instructions and a bit more info available [here](https://github.com/hakimel/reveal.js#markdown).
-                        </section>
-                        ```
-                    </script>
+                    ... vaan LXC container (IP, CPU, muisti)
                 </section>
+
+                <section data-markdown>
+                    ### Copy on Write
+
+                    pohjalle valmis Ubuntu tai CentOS
+
+                    omat lisäykset "committeina"
+                </section>
+
+                <section data-markdown>
+                    ### Dockerfile ja repository
+
+                    ```
+                    $ docker build -t mikaelhg/rabbitmq \
+                        git://github.com/mikaelhg/docker-rabbitmq.git
+
+                    ...
+                    Step 13 : CMD /usr/sbin/rabbitmq-server
+                    ---> Running in 8951ed47eb9a
+                    ---> 52b9da625e0a
+
+                    Successfully built 52b9da625e0a
+
+                    $ docker push mikaelhg/rabbitmq
+                    ```
+
+                </section>
+
+                <section data-markdown>
+                    ### Käynnistys
+
+                    ```
+                    $ docker pull mikaelhg/rabbitmq # tarvittaessa
+
+                    $ docker run -p 5672:5672 -p 15672:15672 mikaelhg/rabbitmq
+
+                    WARNING: IPv4 forwarding is disabled.
+
+                    RabbitMQ 3.1.5. Copyright (C) 2007-2013 GoPivotal, Inc.
+                    ##  ##      Licensed under the MPL.  See http://www.rabbitmq.com/
+                    ##  ##
+                    ##########  Logs: /var/log/rabbitmq/rabbit@52df2aaa7276.log
+                    ######  ##        /var/log/rabbitmq/rabbit@52df2aaa7276-sasl.log
+                    ##########
+                    Starting broker... completed with 6 plugins.
+
+                    ```
+
+                </section>
+
+                <!--
+
+                Dockerfile ja repository (github imageille)
+
+                brtfs vs aufs: https://github.com/dotcloud/docker/issues/443
+
+                Vastaan: vain Linuxille
+
+                Puolesta: kevyempi kuin virtualisointi
+
+                Tänään: CI ympäristö integraatiotestaukseen
+
+                2014-2015: flynn.io PaaS
+
+                Demo:
+
+                -->
 
             </div>
 
         </div>
 
-        <script src="//cdn.jsdelivr.net/reveal.js/2.5.0/lib/js/head.min.js"></script>
-        <script src="//cdn.jsdelivr.net/reveal.js/2.5.0/js/reveal.min.js"></script>
-
         <script>
-
-            // Full list of configuration options available here:
-            // https://github.com/hakimel/reveal.js#configuration
             Reveal.initialize({
                 controls: true,
                 progress: true,
                 history: true,
                 center: true,
 
-                theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+                theme: Reveal.getQueryHash().theme || 'sky', // available themes are in /css/theme
                 transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
 
                 // Optional libraries used to extend on reveal.js
@@ -102,7 +139,6 @@
                     { src: '//cdn.jsdelivr.net/reveal.js/2.5.0/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } }
                 ]
             });
-
         </script>
 
     </body>
