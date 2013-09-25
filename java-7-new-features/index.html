@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8" />
+
+        <title>Java 7 uudet ominaisuudet, aikamatka vuoteen 2011</title>
+
+        <meta name="description" content="Java 7 uudet ominaisuudet, aikamatka vuoteen 2011" />
+        <meta name="author" content="Mikael Gueck" />
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/reveal.js/2.5.0/css/reveal.css" />
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/reveal.js/2.5.0/css/theme/sky.css" id="theme" />
+
+        <script src="//cdn.jsdelivr.net/reveal.js/2.5.0/lib/js/head.min.js"></script>
+        <script src="//cdn.jsdelivr.net/reveal.js/2.5.0/js/reveal.js"></script>
+
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/reveal.js/2.5.0/lib/css/zenburn.css" />
+
+        <script>
+            document.write( '<link rel="stylesheet" href="//cdn.jsdelivr.net/reveal.js/2.5.0/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+        </script>
+
+        <!--[if lt IE 9]>
+        <script src="//cdn.jsdelivr.net/reveal.js/2.5.0/lib/js/html5shiv.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+        <div class="reveal">
+
+            <div class="slides">
+
+<section data-markdown>
+  # Java 7 uutuudet
+    
+  ## aikamatka vuoteen 2011
+    
+  -- Mikael Gueck, 24.9.2013
+</section>
+
+<section data-markdown>
+  "It's astounding
+
+  time is fleeting
+    
+  madness takes its toll."
+
+  « Rocky Horror Picture Show »
+</section>
+
+<section data-markdown>
+  Triviaalit esimerkit 
+  
+  otettu suurelta osin 
+  
+  muiden matskuista.
+</section>
+
+<section data-markdown>
+### Automatic Resource Management
+
+```java
+try (InputStream in = new FileInputStream(src),
+    OutputStream out = new FileOutputStream(dest))
+{
+  byte[] buf = new byte[8192];
+  int n;
+  while (n = in.read(buf)) >= 0) out.write(buf, 0, n);
+}
+```
+
+java.lang.AutoCloseable
+
+JDBC 4.1 kamat ovat AutoCloseable, esim. PreparedStatement
+</section>
+
+<section data-markdown>
+### Multi-Catch
+
+```java
+try {
+  ...
+} catch (ClassCastException e) {
+  notify(e);
+  throw e;
+} catch(InstantiationException |
+  NoSuchMethodException | InvocationTargetException e) {
+  log(e);
+  throw e;
+}
+```
+</section>
+
+<section data-markdown>
+### Timantti eli &lt;&gt;
+
+```java
+List&lt;String&gt; strList = new ArrayList&lt;&gt;();
+
+List&lt;Map&lt;String, List&lt;String&gt;&gt; strList = new ArrayList&lt;&gt;();
+
+Foo&lt;Bar&gt; foo = new Foo&lt;&gt;();
+
+foo.mergeFoo(new Foo&lt;&gt;());
+```
+
+</section>
+
+<section data-markdown>
+### Path vs. File
+
+```java
+java.nio.file.Path foo = java.nio.file.Paths.get("/tmp/foo.txt");
+File fooFile = foo.toFile();
+```
+
+</section>
+
+<section data-markdown>
+### Files
+
+```java
+java.nio.file.Files.copy(src, dst,
+  StandardCopyOption.COPY_ATTRIBUTES,
+  StandardCopyOption.REPLACE_EXISTING);
+
+Files.move(src, dst, StandardCopyOption.ATOMIC_MOVE);  
+```
+  
+</section>
+
+<section data-markdown>
+### DirectoryStream
+```java
+Path srcPath = Paths.get("/home/mikael/src");
+try (DirectoryStream&lt;Path&gt; dir = 
+  srcPath.newDirectoryStream("*.java")) {
+for (final Path file : dir)
+  System.out.println(file.getName());
+}
+```
+</section>
+
+<section data-markdown>
+### Symboliset linkit
+
+```java
+Path newLink = Paths.get("foo");
+Path existingFile = Paths.get("bar");
+try {
+  Files.createLink(newLink, existingFile);
+} catch (IOException x) {
+  // Levy jumissa
+} catch (UnsupportedOperationException x) {
+  // Windows ei tue
+}
+```
+</section>
+
+<section data-markdown>
+### Hakemiston seuranta
+
+```java
+WatchService watchService = FileSystems.getDefault().newWatchService();
+path.register(watchService, ENTRY_CREATE, ENTRY_MODIFY, ENTRY_DELETE);
+
+while (true) {
+  final WatchKey key = watchService.take();
+ 
+  for (WatchEvent&lt;?&gt; watchEvent : key.pollEvents()) {
+    final Kind&lt;?&gt; kind = watchEvent.kind();
+    final WatchEvent&lt;Path&gt; watchEventPath = (WatchEvent&lt;path&gt;) watchEvent;
+    final Path entry = watchEventPath.context();
+    out.println(kind + " -> " + entry);
+```
+</section>
+
+<section data-markdown>
+### G1 Garbage First Collector
+
+The G1 collector is a server-style garbage collector, targeted for multi-processor machines with large memories.
+
+It meets garbage collection (GC) pause time goals with high probability, while achieving high throughput. 
+
+Whole-heap operations, such as global marking, are performed concurrently with the application threads.
+
+This prevents interruptions proportional to heap or live-data size.
+
+http://docs.oracle.com/javase/7/docs/technotes/guides/vm/G1.html
+</section>
+
+<section data-markdown>
+### String switchit
+
+```java
+switch (param) {
+  case "foo": ...
+  case "bar": ...
+  default: ...
+}
+```
+    
+</section>
+
+<section data-markdown>
+### Omat lempparit
+
+```java
+// "UTF-8" ja UnsupportedEncodingException vs.
+import static java.nio.charset.StandardCharsets.UTF_8;
+
+java.util.BitSet.valueOf(new long[] { 1234L });
+
+
+```
+
+</section>
+
+<!--
+<section data-markdown>
+</section>
+
+<section data-markdown>
+</section>
+
+<section data-markdown>
+</section>
+-->
+
+<section data-markdown>
+    # Kiitos!
+
+    ### Ich bin Mikael Gueck
+
+    15 vuotta tätä huuhaata
+
+    möhömahainen tekninen arkkitehti
+
+    gumi@iki.fi / mikael.gueck@affecto.com
+
+    https://github.com/mikaelhg
+
+    http://mikael.io/
+</section>
+
+            </div>
+
+        </div>
+
+        <script>
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+
+                theme: Reveal.getQueryHash().theme || 'sky', // available themes are in /css/theme
+                transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+                    { src: '//cdn.jsdelivr.net/reveal.js/2.5.0/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: '//cdn.jsdelivr.net/reveal.js/2.5.0/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: '//cdn.jsdelivr.net/reveal.js/2.5.0/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: '//cdn.jsdelivr.net/reveal.js/2.5.0/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: '//cdn.jsdelivr.net/reveal.js/2.5.0/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } }
+                ]
+            });
+        </script>
+
+    </body>
+</html>
