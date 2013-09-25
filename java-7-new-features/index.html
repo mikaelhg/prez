@@ -81,6 +81,29 @@ JDBC 4.1 kamat ovat AutoCloseable, esim. PreparedStatement
 </section>
 
 <section data-markdown>
+### try-with JDBC
+
+```java
+String sql = "SELECT id, username FROM users WHERE id = ?";
+List<User> users = new ArrayList<>();
+try (Connection con = DriverManager.getConnection(myConnectionURL);
+     PreparedStatement ps = con.prepareStatement(sql);) {
+    ps.setInt(1, userId);
+    try (ResultSet rs = ps.executeQuery();) {
+        while(rs.next()) {
+            users.add(new User(rs.getInt("id"), rs.getString("name")));
+        }
+    }
+} catch (SQLException e) {
+    e.printStackTrace();
+}
+return users;
+```
+
+http://stackoverflow.com/questions/8066501/how-should-i-use-try-with-resources-with-jdbc
+</section>
+
+<section data-markdown>
 ### Multi-Catch
 
 ```java
