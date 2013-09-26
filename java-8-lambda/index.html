@@ -34,57 +34,125 @@
     <body>
         <div class="reveal">
 
-            <div class="slides">
-                <section data-markdown>
-                    # Java 8 lambdat
+<div class="slides">
 
-                    screwing with your fragile little mind
-                </section>
+<section data-markdown>
+    # Java 8 lambdat
 
-                <section data-markdown>
-                    ![lamb - da](lambda.jpg)
-                </section>
+    screwing with your fragile little mind
+</section>
 
-                <section data-markdown>
-                    ### Java 8
-                    ```java
-                    final List&lt;String&gt; docks = CHARACTERS.stream()
-                        .filter(c -> c.seasons.contains(2))
-                        .sorted((a, b) -> a.seasons.size() - b.seasons.size())
-                        .map(c -> c.name)
-                        .collect(Collectors.toList());
-                    ```
-                </section>
+<section data-markdown>
+    ![lamb - da](lambda.jpg)
+</section>
 
-                <section data-markdown>
-                    ### Scala
-                    ```scala
-                    val docks = CHARACTERS
-                                    filter {_.seasons.contains(2)}
-                                    sortBy {_.seasons.size}
-                                    map {_.name}
-                    ```
-                </section>
+<section data-markdown>
+### Java 8
+```java
+final List&lt;String&gt; docks = CHARACTERS.stream()
+    .filter(c -> c.seasons.contains(2))
+    .sorted((a, b) -> a.seasons.size() - b.seasons.size())
+    .map(c -> c.name)
+    .collect(Collectors.toList());
+```
+</section>
 
-                <section data-markdown>
-                    ### Kotlin
-                    ```kotlin
-                    val docks = CHARACTERS.filter { it.seasons.any { it == 2 } }
-                                      .sortBy { it.seasons.size }
-                                      .map { it.name }
-                    ```
-                </section>
+<section data-markdown>
+### Scala
+```scala
+val docks = CHARACTERS
+                filter {_.seasons.contains(2)}
+                sortBy {_.seasons.size}
+                map {_.name}
+```
+</section>
 
-                <section data-markdown>
-                    ### Groovy
-                    ```groovy
-                    docks = CHARACTERS.findAll { it.seasons.contains(2) }
-                                      .sort { it.seasons.size() }
-                                      .collect { it.name }
-                    ```
-                </section>
+<section data-markdown>
+### Kotlin
+```kotlin
+val docks = CHARACTERS.filter { it.seasons.any { it == 2 } }
+                  .sortBy { it.seasons.size }
+                  .map { it.name }
+```
+</section>
 
-            </div>
+<section data-markdown>
+### Groovy
+```groovy
+docks = CHARACTERS.findAll { it.seasons.contains(2) }
+                  .sort { it.seasons.size() }
+                  .collect { it.name }
+```
+</section>
+
+<section data-markdown>
+### Uusi aika
+
+```java
+ZoneId HEL = ZoneId.of("Europe/Helsinki");
+ZoneId CDG = ZoneId.of("Europe/Paris");
+
+LocalDate date = LocalDate.of(2013, Month.SEPTEMBER, 26);
+LocalTime takeoff = LocalTime.of(19, 30);
+LocalTime landing = LocalTime.of(21, 35);
+
+Duration flightTime = Duration.between(
+  ZonedDateTime.of(date, takeoff, HEL),
+  ZonedDateTime.of(date, landing, CDG));
+
+System.out.println("Lentoaika: " + flightTime);
+```
+</section>
+
+<section data-markdown>
+### Uusi aika
+
+```java
+DateTimeFormatter.ISO_DATE.
+  format(LocalDateTime.of(2013, 9, 26, 13, 00));
+
+DateTimeFormatter.ISO_DATE_TIME.
+  format(LocalDateTime.of(2013, 9, 26, 14, 00));
+```
+
+http://docs.oracle.com/javase/tutorial/datetime/
+</section>
+
+
+<section data-markdown>
+### Map parannukset
+
+```java
+final Map&lt;String, String&gt; map = new HashMap&lt;&gt;();
+map.put("a", "b");
+
+map.computeIfAbsent("c", k -> "d") == "d"
+
+map.computeIfPresent("a", (k, v) -> "e" + v) == "eb"
+```
+</section>
+
+<section data-markdown>
+</section>
+
+<section data-markdown>
+</section>
+
+<section data-markdown>
+</section>
+
+<section data-markdown>
+</section>
+
+<section data-markdown>
+</section>
+
+<section data-markdown>
+</section>
+
+
+
+</div>
 
         </div>
 
