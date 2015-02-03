@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8" />
+
+        <title>Docker, 1Q2015 - sovellusten jakelu ja ajaminen pilvessä</title>
+
+        <meta name="author" content="Mikael Gueck" />
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" />
+
+        <link rel="stylesheet" href="http://cdn.jsdelivr.net/reveal.js/2.5.0/css/reveal.css" />
+        <link rel="stylesheet" href="http://cdn.jsdelivr.net/reveal.js/2.5.0/css/theme/sky.css" id="theme" />
+
+        <script src="http://cdn.jsdelivr.net/reveal.js/2.5.0/lib/js/head.min.js"></script>
+        <script src="http://cdn.jsdelivr.net/reveal.js/2.5.0/js/reveal.js"></script>
+
+        <link rel="stylesheet" href="http://cdn.jsdelivr.net/reveal.js/2.5.0/lib/css/zenburn.css" />
+
+        <script>
+            document.write( '<link rel="stylesheet" href="http://cdn.jsdelivr.net/reveal.js/2.5.0/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+        </script>
+
+        <!--[if lt IE 9]>
+        <script src="//cdn.jsdelivr.net/reveal.js/2.5.0/lib/js/html5shiv.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+        <div class="reveal">
+
+            <div class="slides">
+                <section data-markdown>
+                    # Docker, 1Q2015
+                    ## Sovellusten jakelu ja ajaminen pilvessä
+                    <p><small>-- Mikael Gueck, 3.2.2015</small></p>
+                </section>
+
+                <section data-markdown>
+                    ### "Git" ajoympäristöille
+
+                    * piilottaa samalla alustalla pyörivät softat toisiltaan
+
+                    * erottaa sovelluksen ja ajoalustan riippuvuus toisistaan
+
+                    * kehittäjille täysi valta ajoympäristön konfigurointiin
+
+                    * ei pelkoa todellisuuden ja asennusohjeiden erosta
+
+                    * kevyt, versioitu, mutta ei Aito Virtuaalikone&trade;
+
+                    * ... vaan LXC container (IP, CPU, muisti)
+                </section>
+
+                <section data-markdown>
+                    ### Toimintalogiikka
+
+                    * käynnistää sovellusprosessin LXC-containerissa
+
+                    * kernelin prosessinäkyvyys, IP-osoite, muisti
+
+                    * sovelluspaketit tehdään kerroksissa: käyttis,
+                    kirjastot/JVM, sovellus, konfiguraatiotiedostot
+
+                    * rakentaa prosessille virtuaalisen näkymän
+                    versioituun tiedostojärjestelmään
+
+                    * kommitoidut image-tasot ovat read-only
+
+                    * siksi sovellus käynnistyy aina* samalla tavalla
+                </section>
+
+                <section data-markdown>
+                    ### Ympäristö ja ekosysteemi
+
+                    * GitHub vastine imageille https://registry.hub.docker.com/
+
+                    * Docker pohjana Red Hatin uudelle pilviplättikselle
+
+                    * Amazonin, Googlen ja Microsoftin IaaS alustat
+
+                    * isomman infran hallintajärjestelmät, kuten
+                      Googlen Kubernetes
+
+                    * useat CI-palvelut ajavat buildeja Dockerilla
+
+                    * lukemattomat Open Source projektit tarjoavat
+                      kokeiluympäristön Docker-imagena
+                </section>
+
+                <section>
+
+                    <section data-markdown>
+                        ### Dockerfile ja repository
+
+                        ```
+                        $ docker build -t mikaelhg/rabbitmq \
+                            git://github.com/mikaelhg/docker-rabbitmq.git
+
+                        ...
+                        Step 13 : CMD /usr/sbin/rabbitmq-server
+                        ---> Running in 8951ed47eb9a
+                        ---> 52b9da625e0a
+
+                        Successfully built 52b9da625e0a
+
+                        $ docker push mikaelhg/rabbitmq
+
+                        The push refers to a repository [mikaelhg/rabbitmq] (len: 1)
+                        Sending image list
+                        Pushing repository mikaelhg/rabbitmq (1 tags)
+                        ...
+                        ```
+
+                        asennusohjeet gitissä / [github](https://github.com/mikaelhg/docker-rabbitmq)issa
+
+                        myös yksityiset repositoryt imageille
+                    </section>
+
+                    <section data-markdown>
+                        ### Dockerfile
+
+                        ```
+                        FROM ubuntu:12.04
+
+                        ADD policy-rc.d /usr/sbin/policy-rc.d
+                        RUN /bin/chmod 755 /usr/sbin/policy-rc.d
+
+                        ENV DEBIAN_FRONTEND noninteractive
+                        ADD rabbitmq-signing-key-public.asc /tmp/rabbitmq-signing-key-public.asc
+                        RUN apt-key add /tmp/rabbitmq-signing-key-public.asc
+
+                        RUN echo "deb http://www.rabbitmq.com/debian/ testing main" > /etc/apt/sources.list.d/rabbitmq.list
+                        RUN apt-get -qq update
+                        RUN apt-get -qq -y install rabbitmq-server
+                        RUN /usr/sbin/rabbitmq-plugins enable rabbitmq_management
+
+                        EXPOSE 5672 15672
+                        CMD /usr/sbin/rabbitmq-server
+                        ```
+                    </section>
+
+                </section>
+
+                <section data-markdown>
+                    ### Data ja metadata
+
+                    ```
+                    Successfully built 52b9da625e0a
+
+                    $ cat /var/lib/docker/graph/52b9da625e0a*/json
+                    {"id":"52b9da625e0a...","parent":"21b588a3f35f7...", ...
+
+                    $ cat /var/lib/docker/graph/e7ef3b534726*/json
+                    {"id":"e7ef3b534726c7c...","parent":"62cd0c01b2f4...",
+                     "container_config":{"Cmd":["/bin/sh","-c",
+                       "/usr/sbin/rabbitmq-plugins enable rabbitmq_management"]
+
+                    $ cat .../e7ef3b534726*/layer/etc/rabbitmq/enabled_plugins
+                    [rabbitmq_management].
+
+                    $ find .../e7ef3b534726*/layer/ -type f | xargs ls -Flah
+                    -r-------- 1 root 20 03:00 .../layer/.erlang.cookie
+                    -rw-r--r-- 1 root 23 16:02 .../layer/etc/rabbitmq/enabled_plugins
+                    -r--r--r-- 1 root  0 16:02 .../layer/.wh..wh.aufs
+
+                    ```
+                </section>
+
+                    <section data-markdown>
+                    ### Käynnistys
+
+                    ```
+                    $ docker pull mikaelhg/rabbitmq # tarvittaessa
+
+                    $ docker run -p 5672:5672 -p 15672:15672 mikaelhg/rabbitmq
+
+                    WARNING: IPv4 forwarding is disabled.
+
+                    RabbitMQ 3.1.5. Copyright (C) 2007-2013 GoPivotal, Inc.
+                    ##  ##      Licensed under the MPL.  See http://www.rabbitmq.com/
+                    ##  ##
+                    ##########  Logs: /var/log/rabbitmq/rabbit@52df2aaa7276.log
+                    ######  ##        /var/log/rabbitmq/rabbit@52df2aaa7276-sasl.log
+                    ##########
+                    Starting broker... completed with 6 plugins.
+
+                    ```
+                </section>
+
+                <section data-markdown>
+                    ### Pysyvä, ei-versioitu kama
+
+                    ```
+                    $ mkdir /tmp/rabbitmq-logs
+                    $ chown syslog:syslog /tmp/rabbitmq-logs # kirjoittaja
+
+                    $ docker run -p 5672:5672 -p 15672:15672 \
+                        -v /tmp/rabbitmq-logs:/var/log/rabbitmq mikaelhg/rabbitmq
+
+                    RabbitMQ 3.1.5. Copyright (C) 2007-2013 GoPivotal, Inc.
+                    ##  ##      Licensed under the MPL.  See http://www.rabbitmq.com/
+                    ##  ##
+                    ##########  Logs: /var/log/rabbitmq/rabbit@6d3eede69263.log
+                    ######  ##        /var/log/rabbitmq/rabbit@6d3eede69263-sasl.log
+                    ##########
+                    Starting broker... completed with 6 plugins.
+
+                    $ tail /tmp/rabbitmq-logs/rabbit@6d3eede69263-sasl.log
+
+                    ```
+                </section>
+
+                <section data-markdown>
+                    ### Liikkeelle
+
+                    #### [docker.com/tryit](http://www.docker.com/tryit)
+
+                    OSX tai Windows ⇒ Vagrant!
+
+                    Ubuntu ⇒ muutama askel
+
+                    EC2 ⇒ helppo ja hauska
+                </section>
+
+                <section data-markdown>
+                    # Kiitos!
+
+                    ### Ich bin Mikael Gueck
+
+                    15 vuotta tätä huuhaata
+
+                    keski-ikäinen tekninen arkkitehti
+
+                    gumi@iki.fi / mikael.gueck@affecto.com
+
+                    https://github.com/mikaelhg
+
+                    https://index.docker.io/u/mikaelhg/
+
+                    http://mikael.io/
+                </section>
+
+            </div>
+
+        </div>
+
+        <script>
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+
+                theme: Reveal.getQueryHash().theme || 'sky', // available themes are in /css/theme
+                transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
+
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+                    { src: 'http://cdn.jsdelivr.net/reveal.js/2.5.0/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'http://cdn.jsdelivr.net/reveal.js/2.5.0/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'http://cdn.jsdelivr.net/reveal.js/2.5.0/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'http://cdn.jsdelivr.net/reveal.js/2.5.0/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'http://cdn.jsdelivr.net/reveal.js/2.5.0/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } }
+                ]
+            });
+        </script>
+
+    </body>
+</html>
