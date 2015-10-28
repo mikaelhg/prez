@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8" />
+
+        <title>AWS IoT MQTT/"REST" vs PubNub</title>
+
+        <meta name="author" content="Mikael Gueck" />
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" />
+
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/css/reveal.css" />
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/css/theme/sky.css" id="theme" />
+
+        <script src="//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/lib/js/head.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/js/reveal.js"></script>
+
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/lib/css/zenburn.css" />
+
+        <script>
+            document.write( '<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+        </script>
+
+        <!--[if lt IE 9]>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/lib/js/html5shiv.min.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+        <div class="reveal">
+
+            <div class="slides">
+                <section data-markdown>
+                    # AWS IoT / PubNub
+                    ## Connecting devices, browsers and servers
+                    <p><small>-- Mikael Gueck, 28.10.2015</small></p>
+                </section>
+
+                <section data-markdown>
+                    ### Mission
+
+                    * build an IoT data stream app
+
+                    * build a general PubSub browser app
+
+                    * manage with minimal vendor lock-in
+
+                    * vendors come and go
+
+                </section>
+
+                <section data-markdown>
+                    ### AWS IoT (beta)
+
+                    * beta, more features coming soon
+
+                    * message queue and device/application state repo
+
+                    * MQTT connection with a client SSL certificate
+
+                    * [no MQTT WebSocket support](https://forums.aws.amazon.com/thread.jspa?messageID=679681) yet
+
+                    * fake "REST" HTTP publish, but no subscribe
+
+                    * $5 per one million messages
+
+                </section>
+
+                <section data-markdown>
+                    ### AWS integrations
+
+                    * MQTT &rarr; Kinesis firehose
+
+                    * MQTT &rarr; Lambda &rarr; MQTT
+
+                    * MQTT &rarr; Machine Learning
+
+                    * MQTT &rarr; DynamoDB
+
+                </section>
+
+                <section data-markdown>
+                    ### AWS IoT problems
+
+                    * can't really subscribe from browser
+
+                    * no MQTT QoS 2
+
+                </section>
+
+                <section data-markdown>
+                    ### PubNub / Pusher
+
+                    * established players
+
+                    * message queue and device/application state repo
+
+                    * HTTP connection with keys in url
+
+                    * dev kits for every language
+
+                    * PubNub: $2.5 per one million messages
+
+                    * PubNub: minimum billing $150/month
+
+                    * Pusher: slightly different billing
+
+                </section>
+
+                <section data-markdown>
+                    ### Winner
+
+                    * PubNub - right this second
+
+                    * AWS IoT - after they browser features
+
+                </section>
+
+                <section data-markdown>
+                    # Thank you!
+
+                    ### I'm Mikael Gueck
+
+                    15 years of this nonsense
+
+                    a middle-aged technical architect
+
+                    gumi@iki.fi / mikael.gueck@affecto.com
+
+                    https://github.com/mikaelhg
+                </section>
+
+            </div>
+
+        </div>
+
+        <script>
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+
+                theme: Reveal.getQueryHash().theme || 'sky', // available themes are in /css/theme
+                transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
+
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+                    { src: '//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: '//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: '//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: '//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: '//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } }
+                ]
+            });
+        </script>
+
+    </body>
+</html>
