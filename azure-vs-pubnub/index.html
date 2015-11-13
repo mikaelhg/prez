@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8" />
+
+        <title>Azure IoT MQTT/"REST" vs PubNub</title>
+
+        <meta name="author" content="Mikael Gueck" />
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" />
+
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/css/reveal.css" />
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/css/theme/sky.css" id="theme" />
+
+        <script src="//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/lib/js/head.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/js/reveal.js"></script>
+
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/lib/css/zenburn.css" />
+
+        <script>
+            document.write( '<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+        </script>
+
+        <!--[if lt IE 9]>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/lib/js/html5shiv.min.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+        <div class="reveal">
+
+            <div class="slides">
+                <section data-markdown>
+                    # Azure IoT Hub / PubNub
+                    ## Connecting devices, browsers and servers
+                    <p><small>-- Mikael Gueck, 13.11.2015</small></p>
+                </section>
+
+                <section data-markdown>
+                    ### Mission
+
+                    * build an IoT data stream app
+
+                    * build a general PubSub browser app
+
+                    * manage with minimal vendor lock-in
+
+                    * vendors come and go
+
+                </section>
+
+                <section data-markdown>
+                    ### Azure IoT Hub
+
+                    * closely resembles the AWS offering
+
+                    * message queue and device/application state repo
+
+                    * AMQP connection
+
+                    * REST publish, but only device-to-cloud
+
+                    * Event Hub REST connections are PubSub, single delivery
+
+                </section>
+
+                <section data-markdown>
+                    ### Azure IoT problems
+
+                    * feature list and documentation seems unreliable
+
+                    * products evolve so quickly that developing on them seems risky
+
+                </section>
+
+                <section data-markdown>
+                    ### PubNub / Pusher
+
+                    * established players
+
+                    * message queue and device/application state repo
+
+                    * HTTP connection with keys in url
+
+                    * dev kits for every language
+
+                    * PubNub: $2.5 per one million messages
+
+                    * PubNub: minimum billing $150/month
+
+                    * Pusher: slightly different billing
+
+                </section>
+
+                <section data-markdown>
+                    ### Winner
+
+                    * PubNub
+
+                    * long term, whoever supports the standard protocols best
+
+                </section>
+
+                <section data-markdown>
+                    # Thank you!
+
+                    ### I'm Mikael Gueck
+
+                    15 years of this nonsense
+
+                    a middle-aged technical architect
+
+                    gumi@iki.fi / mikael.gueck@affecto.com
+
+                    https://github.com/mikaelhg
+                </section>
+
+            </div>
+
+        </div>
+
+        <script>
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+
+                theme: Reveal.getQueryHash().theme || 'sky', // available themes are in /css/theme
+                transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
+
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+                    { src: '//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: '//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: '//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: '//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: '//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } }
+                ]
+            });
+        </script>
+
+    </body>
+</html>
